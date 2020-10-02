@@ -12,9 +12,9 @@ pr:
 
 jobs:
 - job:
-  displayName: Ubuntu-16.04
+  displayName: Ubuntu-18.04
   pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'ubuntu-18.04'
   strategy:
     matrix:  
       GCC-8 Debug:
