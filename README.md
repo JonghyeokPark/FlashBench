@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/akindo190203/FlashBench/_apis/build/status/JonghyeokPark.FlashBench?branchName=master)](https://dev.azure.com/akindo190203/FlashBench/_build/latest?definitionId=1&branchName=master)
+
 # FlashBench
 
 FlashBench is benchmark tool for exploring Flash SSD charateristics
