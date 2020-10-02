@@ -5,10 +5,10 @@
 
 trigger:
 - master
+- azure-ci
 
 pr:
 - master
-- azure-ci
 
 jobs:
 - job:
