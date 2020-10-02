@@ -62,6 +62,3 @@ jobs:
 
   - script: make -j -C build
     displayName: 'Compiling'
-    
-  - script: make test -C build
-    displayName: 'Running tests'
