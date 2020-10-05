@@ -11,13 +11,18 @@ void Benchmark::test1(ThreadState* thread) {
     FLASHBENCH_ERROR_PRINT("The pool path is NULL\n");
   }
 
-  int fd = open(config::FLAGS_pool_path, O_RDWR);
+  int fd = open(config::FLAGS_pool_path, O_RDWR | O_DIRECT);
 
   if (fd < 0) {
     FLASHBENCH_ERROR_PRINT("Open error filename: %s\n", config::FLAGS_pool_path);
+    exit(-1);
   }
 
-  char buf[config::FLAGS_value_size] = {0,};
+  //char buf[config::FLAGS_value_size] = {0,};
+  void *buf = NULL;
+  if (posix_memalign(&buf, 512, config::FLAGS_value_size) < 0) {
+    FLASHBENCH_ERROR_PRINT("Posix_memalign() error");
+  }
 
   int64_t found = 0;
   int64_t total_read = 0;
@@ -40,15 +45,18 @@ void Benchmark::test1(ThreadState* thread) {
       // offset 
       lseek(fd, request_queue[thread->tid][i].offset, SEEK_SET);
       
-      if (read(fd, buf, 1) < 0) {
+      if (read(fd, buf, config::FLAGS_value_size) < 0) {
         FLASHBENCH_ERROR_PRINT("Read error\n");
+        exit(-1);
       }
       thread->stats.FinishedSingleOp();
     } else { 
       // write phase
       lseek(fd, request_queue[thread->tid][i].offset, SEEK_SET);
-      if(write(fd, request_queue[thread->tid][i].val.c_str(), config::FLAGS_value_size) < 0) {
+      
+      if(write(fd, buf, config::FLAGS_value_size) < 0) {
         FLASHBENCH_ERROR_PRINT("Write error\n");
+        exit(-1);
       }
       thread->stats.FinishedSingleOp();
     
